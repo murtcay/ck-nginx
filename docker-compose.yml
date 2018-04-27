@@ -1,0 +1,33 @@
+version: '2'
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - 0.0.0.0:80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - project_network
+  web1:
+    image: nginx:alpine
+    volumes:
+      - ./web1:/usr/share/nginx/html
+    expose:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=murat.local
+    networks:
+      - project_network
+  web2:
+    image: nginx:alpine
+    volumes:
+      - ./web2:/usr/share/nginx/html
+    expose:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=robot.local
+    networks:
+      - project_network
+networks:
+  project_network:
+    driver: bridge
